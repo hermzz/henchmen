@@ -39,7 +39,7 @@ if(!isset($config['servers']))
 			{
 				console.log('Server '+data.server+' slept for '+data.sleep+' seconds');
 				
-				$('.server_'+data.server.replace(/\./g, '_')).append('<br /'+'>Server slept for '+data.sleep+' seconds');
+				$('.server_'+data.server.replace(/\./g, '_')).append('<br /'+'>Connected: '+data.auth);
 			}
 		</script>
 	</head>

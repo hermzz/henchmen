@@ -2,9 +2,8 @@
 
 header('Content-Type: application/json; charset=UTF-8');
 
-$sleep = rand(1,3);
-
-sleep($sleep);
+$connection = ssh2_connect($_GET['server'], 22, array('hostkey'=>'ssh-rsa'));
+$auth = ssh2_auth_pubkey_file($connection, 'www-data', 'id_rsa.pub', 'id_rsa');
 
 ?>
-{"server": "<?=$_GET['server'];?>", "sleep": <?=$sleep;?>}
+{"server": "<?=$_GET['server'];?>", "auth": "<?=$auth ? 'true' : 'false';?>"}
