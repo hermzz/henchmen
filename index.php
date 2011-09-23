@@ -18,6 +18,7 @@ if(!isset($config['servers']))
 						$.ajax(
 							{
 								url: 'http://deploy.skynet/worker.php?server='+$(e).attr('name'),
+								dataType: 'json',
 								success: show_ajax_results
 							}
 						);
@@ -36,7 +37,9 @@ if(!isset($config['servers']))
 			
 			function show_ajax_results(data, t, jqXHR) 
 			{
-				console.log(data);
+				console.log('Server '+data.server+' slept for '+data.sleep+' seconds');
+				
+				$('.server_'+data.server.replace(/\./g, '_')).append('<br /'+'>Server slept for '+data.sleep+' seconds');
 			}
 		</script>
 	</head>
@@ -46,7 +49,7 @@ if(!isset($config['servers']))
 		<ul>
 			<li><input type="checkbox" name="all" checked="checked"/>All</li>
 			<?php foreach($config['servers'] as $server): ?>
-				<li><input type="checkbox" name="<?=$server;?>" checked="checked" class="servers" /><?=$server;?></li>
+				<li class="server_<?=preg_replace('/\./', '_', $server);?>"><input type="checkbox" name="<?=$server;?>" checked="checked" class="servers" /><?=$server;?></li>
 			<?php endforeach; ?>
 		</ul>
 		

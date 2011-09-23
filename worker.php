@@ -1,9 +1,10 @@
 <?php 
 
-$sleep = rand(10,20);
+header('Content-Type: application/json; charset=UTF-8');
+
+$sleep = rand(1,3);
 
 sleep($sleep);
 
 ?>
-
-This is a worker for <?=$_GET['server'];?> and it slept for <?=$sleep;?> seconds!
+{"server": "<?=$_GET['server'];?>", "sleep": <?=$sleep;?>}
