@@ -30,8 +30,8 @@ if($auth)
 		
 		$log[] = array(
 			'command' => $command,
-			'output' => $output,
-			'error' => $stderr_output,
+			'output' => trim($output),
+			'error' => trim($stderr_output),
 			'runtime' => round(microtime(true) - $command_start, 3)
 		);
 		
@@ -43,6 +43,7 @@ if($auth)
 echo json_encode(
 	array(
 		'server' => $_GET['server'],
+		'success' => (strlen($stderr_output) == 0),
 		'auth' => $auth,
 		'log' => $log,
 		'runtime' => round(microtime(true) - $start_time, 3)
