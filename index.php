@@ -38,7 +38,11 @@ if(!isset($config['servers']))
 			function show_ajax_results(data, t, jqXHR) 
 			{
 				var server_li = $('.server_'+data.server.replace(/\./g, '_'))
-				$(server_li).append('<br /'+'>Success: '+ (data.success ? 'yes!' : 'no :-(') + '<ol></ol>');
+				$(server_li).append(
+					'<br /'+'>Success: ' + (data.success ? 'yes!' : 'no :-(') + 
+					'<br /'+'>Total run time: ' + data.runtime + ' seconds' +
+					'<ol></ol>'
+				);
 				
 				console.log(data.log);
 				$(data.log).each(function(i, v) {
@@ -47,7 +51,7 @@ if(!isset($config['servers']))
 						'<li>Command: ' + v.command + 
 						'<br /'+'>Output: ' + v.output + 
 						'<br /'+'>Stderr: ' + v.error + 
-						'<br /'+'>Running time: ' + v.runtime + '</li>'
+						'<br /'+'>Running time: ' + v.runtime + ' seconds</li>'
 					);
 				});
 			}
