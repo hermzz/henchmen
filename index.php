@@ -37,9 +37,19 @@ if(!isset($config['servers']))
 			
 			function show_ajax_results(data, t, jqXHR) 
 			{
-				console.log('Server '+data.server+' slept for '+data.sleep+' seconds');
+				var server_li = $('.server_'+data.server.replace(/\./g, '_'))
+				$(server_li).append('<br /'+'>Success: '+ (data.success ? 'yes!' : 'no :-(') + '<ol></ol>');
 				
-				$('.server_'+data.server.replace(/\./g, '_')).append('<br /'+'>Connected: '+data.auth);
+				console.log(data.log);
+				$(data.log).each(function(i, v) {
+					console.log(v);
+					$(server_li).find('ol').append(
+						'<li>Command: ' + v.command + 
+						'<br /'+'>Output: ' + v.output + 
+						'<br /'+'>Stderr: ' + v.error + 
+						'<br /'+'>Running time: ' + v.runtime + '</li>'
+					);
+				});
 			}
 		</script>
 	</head>
