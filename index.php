@@ -15,6 +15,9 @@ if(!isset($config['servers']))
 				$('#deploy_form').submit(function() 
 				{
 					$('.servers').each(function(i, e) {
+						$(e).parent().find('.status').append('<img src="spinner.gif" /'+'> Processing...');
+						$(e).parent().find('.status').show();
+						
 						$.ajax(
 							{
 								url: 'http://deploy.skynet/worker.php?server='+$(e).attr('name'),
@@ -38,7 +41,7 @@ if(!isset($config['servers']))
 			function show_ajax_results(data, t, jqXHR) 
 			{
 				var server_li = $('.server_'+data.server.replace(/\./g, '_'))
-				$(server_li).append(
+				$(server_li).find('.status').html(
 					'<br /'+'>Success: ' + (data.success ? 'yes!' : 'no :-(') + 
 					'<br /'+'>Total run time: ' + data.runtime + ' seconds' +
 					'<ol></ol>'
@@ -56,6 +59,10 @@ if(!isset($config['servers']))
 				});
 			}
 		</script>
+		
+		<style type="text/css">
+			.status { display: none; }
+		</style>
 	</head>
 	<body>
 		<h2>Servers</h2>
@@ -63,7 +70,10 @@ if(!isset($config['servers']))
 		<ul>
 			<li><input type="checkbox" name="all" checked="checked"/>All</li>
 			<?php foreach($config['servers'] as $server): ?>
-				<li class="server_<?=preg_replace('/\./', '_', $server);?>"><input type="checkbox" name="<?=$server;?>" checked="checked" class="servers" /><?=$server;?></li>
+				<li class="server_<?=preg_replace('/\./', '_', $server);?>">
+					<input type="checkbox" name="<?=$server;?>" checked="checked" class="servers" /><?=$server;?>
+					<div class="status"></div>
+				</li>
 			<?php endforeach; ?>
 		</ul>
 		
