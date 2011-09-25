@@ -22,7 +22,12 @@ if(!isset($config['servers']))
 							{
 								url: 'http://deploy.skynet/worker.php?server='+$(e).attr('name'),
 								dataType: 'json',
-								success: show_ajax_results
+								success: show_ajax_results,
+								error: function(jqXHR, text, error) {
+									$('.server_'+$(e).attr('name').replace(/\./g, '_')).find('.status').attr('class', 'status bad').html(
+										'Error parsing worker response!'
+									);
+								}
 							}
 						);
 					});
