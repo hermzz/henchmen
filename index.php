@@ -15,7 +15,7 @@ if(!isset($config['servers']))
 				$('#deploy_form').submit(function() 
 				{
 					$('.servers').each(function(i, e) {
-						$(e).parent().find('.status').append('<img src="spinner.gif" /'+'> Processing...');
+						$(e).parent().find('.status').append('<img src="spinner.gif" /'+'> Reticulating splines...');
 						$(e).parent().find('.status').show();
 						
 						$.ajax(
