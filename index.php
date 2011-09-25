@@ -41,8 +41,8 @@ if(!isset($config['servers']))
 			function show_ajax_results(data, t, jqXHR) 
 			{
 				var server_li = $('.server_'+data.server.replace(/\./g, '_'))
-				$(server_li).find('.status').html(
-					'<br /'+'>Success: ' + (data.success ? 'yes!' : 'no :-(') + 
+				$(server_li).find('.status').attr('class', 'status good').html(
+					'Success: ' + (data.success ? 'yes!' : 'no :-(') + 
 					'<br /'+'>Total run time: ' + data.runtime + ' seconds' +
 					'<ol></ol>'
 				);
@@ -61,7 +61,25 @@ if(!isset($config['servers']))
 		</script>
 		
 		<style type="text/css">
-			.status { display: none; }
+			.status { 
+				display: none; 
+				padding: 3px;
+			}
+			
+			.good {
+				background-color: #a6ef7b;
+				border: 1px solid #76c83f;
+			}
+
+			.neutral {
+				background-color: #f7fdcb;
+				border: 1px solid #c2d071;
+			}
+
+			.bad {
+				background-color: #ef9398;
+				border: 1px solid #dc5757;
+			}
 		</style>
 	</head>
 	<body>
@@ -72,7 +90,7 @@ if(!isset($config['servers']))
 			<?php foreach($config['servers'] as $server): ?>
 				<li class="server_<?=preg_replace('/\./', '_', $server);?>">
 					<input type="checkbox" name="<?=$server;?>" checked="checked" class="servers" /><?=$server;?>
-					<div class="status"></div>
+					<div class="status neutral"></div>
 				</li>
 			<?php endforeach; ?>
 		</ul>
