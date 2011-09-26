@@ -20,7 +20,7 @@ if(!isset($config['servers']))
 						
 						$.ajax(
 							{
-								url: 'http://deploy.skynet/worker.php?server='+$(e).attr('name'),
+								url: 'worker.php?server='+$(e).attr('name'),
 								dataType: 'json',
 								success: show_ajax_results,
 								error: function(jqXHR, text, error) {
