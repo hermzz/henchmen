@@ -35,11 +35,8 @@ if(!isset($config['servers']))
 					return false;
 				});
 				
-				$('input[name="all"]').click(function(e) {	
-					if(e.target.checked)
-					{
-						$('input[type="checkbox"]').attr('checked', true);
-					}
+				$('input[name="all"]').click(function(e) {
+					$('input[type="checkbox"]').attr('checked', (e.target.checked ? true : false));
 				});
 			});
 			
@@ -72,43 +69,26 @@ if(!isset($config['servers']))
 			}
 		</script>
 		
-		<style type="text/css">
-			.status { 
-				display: none; 
-				padding: 3px;
-			}
-			
-			.good {
-				background-color: #a6ef7b;
-				border: 1px solid #76c83f;
-			}
-
-			.neutral {
-				background-color: #f7fdcb;
-				border: 1px solid #c2d071;
-			}
-
-			.bad {
-				background-color: #ef9398;
-				border: 1px solid #dc5757;
-			}
-		</style>
+		<link rel="stylesheet" href="index.css" />
 	</head>
 	<body>
-		<h2>Servers</h2>
+		<div id="content">
+			<h1>Henchmen</h1>
+			<p id="tagline">at your service</p>
 	
-		<ul>
-			<li><input type="checkbox" name="all" checked="checked"/>All</li>
-			<?php foreach($config['servers'] as $server): ?>
-				<li class="server_<?=preg_replace('/\./', '_', $server);?>">
-					<input type="checkbox" name="<?=$server;?>" checked="checked" class="servers" /><?=$server;?>
-					<div class="status neutral"></div>
-				</li>
-			<?php endforeach; ?>
-		</ul>
+			<ul id="serverlist">
+				<li class="all"><input type="checkbox" name="all" checked="checked"/>All</li>
+				<?php foreach($config['servers'] as $k => $server): ?>
+					<li class="server_<?=preg_replace('/\./', '_', $server);?> <?=($k%2==0 ? 'odd' : 'even');?>">
+						<input type="checkbox" name="<?=$server;?>" checked="checked" class="servers" /><?=$server;?>
+						<div class="status neutral"></div>
+					</li>
+				<?php endforeach; ?>
+			</ul>
 		
-		<form action="#" id="deploy_form" method="post">
-			<input type="submit" name="submit_deploy" value="Deploy" />
-		</form>
+			<form action="#" id="deploy_form" method="post">
+				<input type="submit" name="submit_deploy" value="Deploy" />
+			</form>
+		</div>
 	</body>
 </html>
