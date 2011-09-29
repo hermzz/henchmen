@@ -7,6 +7,12 @@ if(!isset($config['servers']))
 
 header('Content-Type: application/json; charset=UTF-8');
 
+$lockfile = __DIR__.'/locks/'.$_GET['server'].'.lock';
+if(file_exists($lockfile))
+	die(json_encode(array('success' => false, 'server' => $_GET['server'], 'error' => 'Lock file in place')));
+
+touch($lockfile);
+
 $start_time = microtime(true);
 
 $connection = ssh2_connect($_GET['server'], 22, array('hostkey'=>'ssh-rsa'));
@@ -39,6 +45,8 @@ if($auth)
 			break;
 	}
 }
+unlink($lockfile);
+
 
 echo json_encode(
 	array(

@@ -45,23 +45,30 @@ if(!isset($config['servers']))
 			
 			function show_ajax_results(data, t, jqXHR) 
 			{
+				console.log(data);
 				var server_li = $('.server_'+data.server.replace(/\./g, '_'))
-				$(server_li).find('.status').attr('class', 'status good').html(
-					'Success: ' + (data.success ? 'yes!' : 'no :-(') + 
-					'<br /'+'>Total run time: ' + data.runtime + ' seconds' +
-					'<ol></ol>'
-				);
-				
-				console.log(data.log);
-				$(data.log).each(function(i, v) {
-					console.log(v);
-					$(server_li).find('ol').append(
-						'<li>Command: ' + v.command + 
-						'<br /'+'>Output: ' + v.output + 
-						'<br /'+'>Stderr: ' + v.error + 
-						'<br /'+'>Running time: ' + v.runtime + ' seconds</li>'
+				if(data.success)
+				{
+					$(server_li).find('.status').attr('class', 'status good').html(
+						'Success: ' + (data.success ? 'yes!' : 'no :-(') + 
+						'<br /'+'>Total run time: ' + data.runtime + ' seconds' +
+						'<ol></ol>'
 					);
-				});
+				
+					$(data.log).each(function(i, v) {
+						console.log(v);
+						$(server_li).find('ol').append(
+							'<li>Command: ' + v.command + 
+							'<br /'+'>Output: ' + v.output + 
+							'<br /'+'>Stderr: ' + v.error + 
+							'<br /'+'>Running time: ' + v.runtime + ' seconds</li>'
+						);
+					});
+				} else {
+					$(server_li).find('.status').attr('class', 'status bad').html(
+						'Error: ' + data.error
+					);
+				}
 			}
 		</script>
 		
