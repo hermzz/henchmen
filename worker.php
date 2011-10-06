@@ -1,5 +1,7 @@
 <?php 
 
+session_start();
+
 $config = yaml_parse_file('config.yml');
 
 if(!isset($config['servers']))
@@ -7,8 +9,9 @@ if(!isset($config['servers']))
 
 header('Content-Type: application/json; charset=UTF-8');
 
-$lockfile = __DIR__.'/locks/lock.lock';
-if(file_exists($lockfile))
+$lockfile = __DIR__.'/locks/'.$_GET['server'].'-'.session_id().'.lock';
+exec('ls '.__DIR__.'/locks/'.$_GET['server'].'-* | grep -v '.session_id().'', $ls);
+if(strlen(trim(implode('', $ls))) > 0)
 	die(json_encode(array('success' => false, 'server' => $_GET['server'], 'error' => 'Lock file in place')));
 
 touch($lockfile);
