@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 $config = yaml_parse_file('config.yml');
 
 if(!isset($config['servers']))
@@ -63,7 +65,7 @@ if(!isset($config['servers']))
 					});
 				} else {
 					$(server_li).find('.status').attr('class', 'status bad').html(
-						'Error: ' + data.error
+						'Error: ' + data.log[data.log.length-1].error
 					);
 				}
 			}
