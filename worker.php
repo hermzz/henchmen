@@ -18,7 +18,15 @@ touch($lockfile);
 
 $start_time = microtime(true);
 
-$connection = ssh2_connect($_GET['server'], 22, array('hostkey'=>'ssh-rsa'));
+$server_name = false;
+foreach($config['servers'] as $k => $server)
+	if($k == $_GET['server'])
+		$server_name = $server;
+
+if(!$server_name)
+	die(json_encode(array('success' => false, 'server' => $_GET['server'], 'error' => 'Server name not found')));
+
+$connection = ssh2_connect($server_name, 22, array('hostkey'=>'ssh-rsa'));
 $auth = ssh2_auth_pubkey_file($connection, $config['user'], 'id_rsa.pub', 'id_rsa');
 
 $log = array();

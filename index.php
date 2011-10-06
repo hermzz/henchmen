@@ -80,11 +80,13 @@ if(!isset($config['servers']))
 	
 			<ul id="serverlist">
 				<li class="all"><input type="checkbox" name="all" checked="checked"/>All</li>
+				<?php $i=0; ?>
 				<?php foreach($config['servers'] as $k => $server): ?>
-					<li class="server_<?=preg_replace('/\./', '_', $server);?> <?=($k%2==0 ? 'odd' : 'even');?>">
-						<input type="checkbox" name="<?=$server;?>" checked="checked" class="servers" /><?=$server;?>
+					<li class="server_<?=preg_replace('/\./', '_', $k);?> <?=($i%2==0 ? 'odd' : 'even');?>">
+						<input type="checkbox" name="<?=$k;?>" checked="checked" class="servers" /><?=$k;?>
 						<div class="status neutral"></div>
 					</li>
+					<?php $i++; ?>
 				<?php endforeach; ?>
 			</ul>
 		
