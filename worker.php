@@ -7,7 +7,7 @@ if(!isset($config['servers']))
 
 header('Content-Type: application/json; charset=UTF-8');
 
-$lockfile = __DIR__.'/locks/'.$_GET['server'].'.lock';
+$lockfile = __DIR__.'/locks/lock.lock';
 if(file_exists($lockfile))
 	die(json_encode(array('success' => false, 'server' => $_GET['server'], 'error' => 'Lock file in place')));
 
