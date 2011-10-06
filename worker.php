@@ -45,8 +45,8 @@ if($auth)
 			break;
 	}
 }
-unlink($lockfile);
 
+unlink($lockfile);
 
 echo json_encode(
 	array(
