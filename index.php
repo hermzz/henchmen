@@ -65,7 +65,7 @@ if(!isset($config['servers']))
 					});
 				} else {
 					$(server_li).find('.status').attr('class', 'status bad').html(
-						'Error: ' + data.log[data.log.length-1].error
+						'Error: ' + (data.error ? data.error: data.log[data.log.length-1].error)
 					);
 				}
 			}
