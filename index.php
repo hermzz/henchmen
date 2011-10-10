@@ -29,8 +29,11 @@ if(!isset($config['servers']))
 					$.each(apps, function(i, e) {
 						if($('input[name="'+e+'"]')[0].checked)
 						{
-							$('.server_'+e).find('.status').html('<img src="spinner.gif" /'+'> Reticulating splines...');
-							$('.server_'+e).find('.status').show();
+							$('.server_'+e)
+								.find('.status')
+								.html('<img src="spinner.gif" /'+'> Reticulating splines...')
+								.attr('class', 'status neutral')
+								.show();
 						
 							$.ajax(
 								{
