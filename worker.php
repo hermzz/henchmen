@@ -26,14 +26,23 @@ foreach($config['servers'] as $k => $server)
 if(!$server_name)
 	die(json_encode(array('success' => false, 'server' => $_GET['server'], 'error' => 'Server name not found')));
 
+$command_settings = $config['commands'][$_GET['task']];
+if(!$command_settings)
+	die(json_encode(array('success' => false, 'server' => $_GET['server'], 'error' => 'Command settings not found')));
+
 $connection = ssh2_connect($server_name, 22, array('hostkey'=>'ssh-rsa'));
-$auth = ssh2_auth_pubkey_file($connection, $config['user'], 'id_rsa.pub', 'id_rsa');
+$auth = ssh2_auth_pubkey_file(
+	$connection, 
+	($command_settings['user'] ? $command_settings['user'] : $config['user']), 
+	'id_rsa.pub', 
+	'id_rsa'
+);
 
 $log = array();
 
 if($auth)
 {
-	foreach($config['commands'] as $k => $command)
+	foreach($config['commands'][$_GET['task']]['cmds'] as $k => $command)
 	{
 		$command_start = microtime(true);
 		

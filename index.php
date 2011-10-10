@@ -12,21 +12,33 @@ if(!isset($config['servers']))
 		<title>Henchmen</title>
 		<script src="jquery.js"></script>
 		<script>
+			applies = [
+				<?php foreach($config['commands'] as $command): ?>
+					'<?=$command['servers']?>', // <?=$command['name'];?>
+					
+				<?php endforeach; ?>
+				
+				// leave blank space on purpose
+			];
+			
 			$(document).ready(function() 
 			{
 				$('#deploy_form').submit(function() 
 				{
-					$('.servers').each(function(i, e) {
-						$(e).parent().find('.status').append('<img src="spinner.gif" /'+'> Reticulating splines...');
-						$(e).parent().find('.status').show();
+					apps = applies[$('select[name="task"]').val()].split(',');
+					$.each(apps, function(i, e) {
+						$('.server_'+e).find('.status').append('<img src="spinner.gif" /'+'> Reticulating splines...');
+						$('.server_'+e).find('.status').show();
 						
 						$.ajax(
 							{
-								url: 'worker.php?server='+$(e).attr('name'),
+								url: 'worker.php',
+								data: {server: e, task: $('select[name="task"]').val()},
+								type: 'GET',
 								dataType: 'json',
 								success: show_ajax_results,
 								error: function(jqXHR, text, error) {
-									$('.server_'+$(e).attr('name').replace(/\./g, '_')).find('.status').attr('class', 'status bad').html(
+									$('.server_'+e).find('.status').attr('class', 'status bad').html(
 										'Error parsing worker response!'
 									);
 								}
@@ -40,22 +52,34 @@ if(!isset($config['servers']))
 				$('input[name="all"]').click(function(e) {
 					$('input[type="checkbox"]').attr('checked', (e.target.checked ? true : false));
 				});
+				
+				$('select[name="task"]').change(function(e) {
+					if($(e.target).val())
+					{
+						$('#serverlist li').hide();
+						$('#serverlist .status').hide();
+						$('#serverlist .all').show();
+						
+						apps = applies[$(e.target).val()].split(',');
+						$.each(apps, function(k,v) {
+							$('.server_'+v).show().attr('class', 'server_'+v+' '+(k%2 ? 'even' : 'odd'));
+						});
+					}
+				});
 			});
 			
 			function show_ajax_results(data, t, jqXHR) 
 			{
-				console.log(data);
-				var server_li = $('.server_'+data.server.replace(/\./g, '_'))
+				var server_li = $('.server_'+data.server)
 				if(data.success)
 				{
-					$(server_li).find('.status').attr('class', 'status good').html(
+					$(server_li).find('.status').attr('class', 'status good').show().html(
 						'Success: ' + (data.success ? 'yes!' : 'no :-(') + 
 						'<br /'+'>Total run time: ' + data.runtime + ' seconds' +
 						'<ol></ol>'
 					);
 				
 					$(data.log).each(function(i, v) {
-						console.log(v);
 						$(server_li).find('ol').append(
 							'<li>Command: ' + v.command + 
 							'<br /'+'>Output: ' + v.output + 
@@ -91,6 +115,13 @@ if(!isset($config['servers']))
 			</ul>
 		
 			<form action="#" id="deploy_form" method="post">
+				<select name="task">
+					<option value="">Select a task</option>
+					<option value="">-------------</option>
+					<?php foreach($config['commands'] as $k => $command): ?>
+						<option value="<?=$k;?>"><?=$command['name'];?></option>
+					<?php endforeach; ?>
+				</select>
 				<input type="submit" name="submit_deploy" value="Deploy" />
 			</form>
 		</div>
