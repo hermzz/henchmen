@@ -38,6 +38,14 @@ h1 {
 	margin: 0 10px;
 }
 
+#serverlist pre {
+    border: 1px solid #999;
+    padding:  3px;
+    background-color: #000;
+    color:  #fff;
+    margin: 3px auto;
+}
+
 .odd { 
 	background-color: #eee;
 }

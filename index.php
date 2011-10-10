@@ -27,23 +27,26 @@ if(!isset($config['servers']))
 				{
 					apps = applies[$('select[name="task"]').val()].split(',');
 					$.each(apps, function(i, e) {
-						$('.server_'+e).find('.status').append('<img src="spinner.gif" /'+'> Reticulating splines...');
-						$('.server_'+e).find('.status').show();
+						if($('input[name="'+e+'"]')[0].checked)
+						{
+							$('.server_'+e).find('.status').html('<img src="spinner.gif" /'+'> Reticulating splines...');
+							$('.server_'+e).find('.status').show();
 						
-						$.ajax(
-							{
-								url: 'worker.php',
-								data: {server: e, task: $('select[name="task"]').val()},
-								type: 'GET',
-								dataType: 'json',
-								success: show_ajax_results,
-								error: function(jqXHR, text, error) {
-									$('.server_'+e).find('.status').attr('class', 'status bad').html(
-										'Error parsing worker response!'
-									);
+							$.ajax(
+								{
+									url: 'worker.php',
+									data: {server: e, task: $('select[name="task"]').val()},
+									type: 'GET',
+									dataType: 'json',
+									success: show_ajax_results,
+									error: function(jqXHR, text, error) {
+										$('.server_'+e).find('.status').attr('class', 'status bad').html(
+											'Error parsing worker response!'
+										);
+									}
 								}
-							}
-						);
+							);
+						}
 					});
 					
 					return false;
@@ -82,7 +85,7 @@ if(!isset($config['servers']))
 					$(data.log).each(function(i, v) {
 						$(server_li).find('ol').append(
 							'<li>Command: ' + v.command + 
-							'<br /'+'>Output: ' + v.output + 
+							'<br /'+'>Output: <pre>' + v.output + '</pre>' +
 							'<br /'+'>Stderr: ' + v.error + 
 							'<br /'+'>Running time: ' + v.runtime + ' seconds</li>'
 						);
