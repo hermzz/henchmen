@@ -29,10 +29,11 @@ if(!isset($config['servers']))
 					$.each(apps, function(i, e) {
 						if($('input[name="'+e+'"]')[0].checked)
 						{
+							console.log('.server_'+e);
 							$('.server_'+e)
-								.find('.status')
+								.find('div')
 								.html('<img src="spinner.gif" /'+'> Reticulating splines...')
-								.attr('class', 'status neutral')
+								.attr('class', 'alert-message neutral')
 								.show();
 						
 							$.ajax(
@@ -43,7 +44,7 @@ if(!isset($config['servers']))
 									dataType: 'json',
 									success: show_ajax_results,
 									error: function(jqXHR, text, error) {
-										$('.server_'+e).find('.status').attr('class', 'status bad').html(
+										$('.server_'+e).find('div').attr('class', 'alert-message error').html(
 											'Error parsing worker response!'
 										);
 									}
@@ -63,7 +64,7 @@ if(!isset($config['servers']))
 					if($(e.target).val())
 					{
 						$('#serverlist li').hide();
-						$('#serverlist .status').hide();
+						$('#serverlist div').hide();
 						$('#serverlist .all').show();
 						
 						apps = applies[$(e.target).val()].split(',');
@@ -79,7 +80,7 @@ if(!isset($config['servers']))
 				var server_li = $('.server_'+data.server)
 				if(data.success)
 				{
-					$(server_li).find('.status').attr('class', 'status good').show().html(
+					$(server_li).find('div').attr('class', 'alert-message success').show().html(
 						'Success: ' + (data.success ? 'yes!' : 'no :-(') + 
 						'<br /'+'>Total run time: ' + data.runtime + ' seconds' +
 						'<ol></ol>'
@@ -94,27 +95,31 @@ if(!isset($config['servers']))
 						);
 					});
 				} else {
-					$(server_li).find('.status').attr('class', 'status bad').html(
+					$(server_li).find('div').attr('class', 'alert-message error').html(
 						'Error: ' + (data.error ? data.error: data.log[data.log.length-1].error)
 					);
 				}
 			}
 		</script>
 		
+		<link rel="stylesheet" href="bootstrap.min.css" />
 		<link rel="stylesheet" href="index.css" />
 	</head>
 	<body>
-		<div id="content">
+		<div class="container">
 			<h1>Henchmen</h1>
 			<p id="tagline">at your service</p>
 	
-			<ul id="serverlist">
+			<ul id="serverlist" class="inputs-list">
 				<li class="all"><input type="checkbox" name="all" checked="checked"/>All</li>
 				<?php $i=0; ?>
 				<?php foreach($config['servers'] as $k => $server): ?>
 					<li class="server_<?=preg_replace('/\./', '_', $k);?> <?=($i%2==0 ? 'odd' : 'even');?>">
-						<input type="checkbox" name="<?=$k;?>" checked="checked" class="servers" /><?=$k;?>
-						<div class="status neutral"></div>
+						<label>
+							<input type="checkbox" name="<?=$k;?>" checked="checked">
+							<span><?=$k;?></span>
+							<div class="alert-message warning" style="display: none;"></div>
+						</label>
 					</li>
 					<?php $i++; ?>
 				<?php endforeach; ?>
